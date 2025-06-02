@@ -57,6 +57,7 @@ function initializeDiscordClient()
 			{
 				console.error('[ERROR] Too many login attempts, giving up.');
 				tryAgain = false;
+				bad('Too many login attempts, giving up.');
 			}
 		}
 	});
