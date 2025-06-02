@@ -49,6 +49,7 @@ function initializeDiscordClient()
 			catch(err)
 			{
 				console.error('[ERROR] Failed to login', err);
+				await waitSeconds(3);
 				tryAgain = true;
 			}
 
@@ -58,6 +59,17 @@ function initializeDiscordClient()
 				tryAgain = false;
 			}
 		}
+	});
+}
+
+function waitSeconds(secs)
+{
+	return new Promise(function(good, bad)
+	{
+		setTimeout(function()
+		{
+			good();
+		}, secs * 1000);
 	});
 }
 

@@ -6,5 +6,7 @@
 		"error": "Something went wrong while asking for the battery level: %%"
 	},
 	"discord_user_to_ping": "<@USER_ID>",
-	"discord_bot_token": "YOUR DISCORD BOT TOKEN"
+	"discord_bot_token": "YOUR DISCORD BOT TOKEN",
+	"discord_channel_id": "ID OF THE CHANNEL WHERE WE'LL SEND THE MESSAGE",
+	"attempts_to_login": 10
 }
