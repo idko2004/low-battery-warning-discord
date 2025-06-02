@@ -1,0 +1,10 @@
+{
+	"battery_percentage_threshold": 30,
+	"messages":
+	{
+		"low_battery": "Battery is at %%, please charge!",
+		"error": "Something went wrong while asking for the battery level: %%"
+	},
+	"discord_user_to_ping": "<@USER_ID>",
+	"discord_bot_token": "YOUR DISCORD BOT TOKEN"
+}
