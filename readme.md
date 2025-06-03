@@ -75,7 +75,7 @@ The bot now should be able to run.
 npm start
 ```
 
-The bot will only attempt to connect to discord when the battery is below the threshold or if something went wrong when reading the battery status. So you should check when the battery of the device is low to see if everything works properly.
+The bot will only attempt to connect to discord when the battery is below the threshold or if something went wrong when reading the battery status. So you should check when the battery of the device is low to see if everything works properly. You can do a little test by running `TEST=1 npm start`.
 
 Also the bot only runs once, it's not running in the background checking every once in a while, instead just checks once and exits, so you will need to create a script or a cronjon to check periodically.
 
