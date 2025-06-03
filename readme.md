@@ -5,7 +5,7 @@ If you happen to have an Android device that you're using as some kind of server
 ### 1. Create a Discord bot
 If you alredy have one, you can just use the token of the other bot (they can even run at the same time!).
 
-If you don't, you can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html), it's from discordpy but for this it works.
+If you don't, you can follow [this guide](https://discordpy.readthedocs.io/en/stable/discord.html), it's from discordpy but it works for this.
 
 In terms of permissions, this bot only needs `Read Messages/View Channels` and `Send Messages`.
 
@@ -80,4 +80,52 @@ The bot will only attempt to connect to discord when the battery is below the th
 Also the bot only runs once, it's not running in the background checking every once in a while, instead just checks once and exits, so you will need to create a script or a cronjon to check periodically.
 
 ### Cronjob
+To be able to create cronjobs on Termux we need to run some things:
 
+```shell
+pkg install cronie termux-services
+sv-enable crond
+```
+
+After this, you need to restart termux. You can do so with the `exit` command.
+
+> To create a cronjob we need to know the path to the main file.
+> To obtain this, you can run the `realpath` command from inside the repository
+> ```shell
+> realpath main.js
+> ```
+> This will tell you the path to the main file, you can copy that to paste it into the cronjob.
+
+Then, we need to create our cronjob:
+
+```shell
+crontab -e
+```
+
+This will open a text editor, in which you can paste something like this:
+
+```
+0 * * * * node /path/to/main.js
+```
+
+This will run every hour.
+
+For cronjobs to start working at boot we also need to install [Termux:Boot](https://f-droid.org/en/packages/com.termux.boot/) on Android.
+
+Then we need to place a file on `~/.termux/boot/`, I will call the file `cronjobs.sh`. Paste this on the file (this is extracted from [The Termux Wiki](https://wiki.termux.com/wiki/Termux:Boot)):
+
+```bash
+#!/data/data/com.termux/files/usr/bin/sh
+termux-wake-lock
+. $PREFIX/etc/profile
+```
+
+Then we need to make it executable by running:
+
+```shell
+chmod +x ~/.termux/boot/cronjobs.sh
+```
+
+> Also, you can make another file to run `node /path/to/main.js` on startup. Just replace the last line of the cronjob file above.
+
+You also may need to change some settings on Android so it doesn't kill Termux while it's on the background.
