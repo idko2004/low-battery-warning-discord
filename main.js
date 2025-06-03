@@ -27,9 +27,13 @@ async function monitorBattery()
 		return;
 	}
 
-	if(status.percentage <= config.battery_percentage_threshold
-	&& status.plugged == "UNPLUGGED")
+	if((status.percentage <= config.battery_percentage_threshold
+	&& status.plugged == "UNPLUGGED") || process.env.TEST === '1')
 	{
+		if(process.env.TEST === '1')
+		{
+			console.log(`[WARN] We're performing a test, so we'll pretend the charge is currently low.`);
+		}
 		console.log(`[INFO] The device is at ${status.percentage}% of charge, please plug it in.`);
 		await discordWrapper.sendDiscordMessage(config.messages.low_battery, `${status.percentage}%`);
 	}

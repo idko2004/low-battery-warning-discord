@@ -3,7 +3,7 @@
 	"messages":
 	{
 		"low_battery": "Battery is at %%, please charge!",
-		"error": "Something went wrong while asking for the battery level: %%"
+		"error": "Something went wrong while asking for the battery level:\n ```\n%%\n```"
 	},
 	"discord_user_to_ping": "<@USER_ID>",
 	"discord_bot_token": "YOUR DISCORD BOT TOKEN",

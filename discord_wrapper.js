@@ -13,13 +13,7 @@ function initializeDiscordClient()
 
 		discordClient = new Discord.Client(
 		{
-			intents:
-			[
-				Discord.GatewayIntentBits.Guilds,
-				Discord.GatewayIntentBits.GuildMessages,
-				Discord.GatewayIntentBits.MessageContent,
-				Discord.GatewayIntentBits.GuildMembers,
-			],
+			intents: [],
 			partials:
 			[
 				Discord.Partials.Channel
