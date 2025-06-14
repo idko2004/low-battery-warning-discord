@@ -60,6 +60,8 @@ Open `config.json` with your favorite text editor and modify the following thing
 
 - In `error` goes the message the bot will send if something goes wrong, the `%%` will be replaced with the error.
 
+- `notification_threshold` indicates the threshold in which a message should be sent if the level of charge did not change much between the current read and the previous, if the difference between the reads is less than the value specified no message will be sent, even if the battery is low.
+
 - In `discord_user_to_ping` you should place the id of the discord user that should receive a notification when the bot sends a message, to copy their id you need to enable developer mode on Discord and right-click on their profile picture, at the bottom should be the option `Copy user ID`, place it inside the `<@` and `>`.
 
 - In `discord_bot_token` you should place your bot's token, the one you should've kept in a safe place.

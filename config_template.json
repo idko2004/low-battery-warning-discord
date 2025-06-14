@@ -3,10 +3,14 @@
 	"messages":
 	{
 		"low_battery": "Battery is at %%, please charge!",
-		"error": "Something went wrong while asking for the battery level:\n ```\n%%\n```"
+		"error": "Something went wrong while asking for the battery level:```%%```"
 	},
+	"notification_threshold": 4,
+	
 	"discord_user_to_ping": "<@USER_ID>",
 	"discord_bot_token": "YOUR DISCORD BOT TOKEN",
 	"discord_channel_id": "ID OF THE CHANNEL WHERE WE'LL SEND THE MESSAGE",
-	"attempts_to_login": 10
+	"attempts_to_login": 10,
+
+	"data_folder": "ABSOLUTE PATH OF THE DIRECTORY IN WHICH THIS PROJECT WILL SAVE SOME FILES, CAN BE IN THE PROJECT'S FOLDER, BUT IT HAS TO BE AN ABSOLUTE PATH"
 }

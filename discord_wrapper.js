@@ -93,7 +93,6 @@ async function sendDiscordMessage(message, extraString)
 
 	await channel.send({content: `${config.discord_user_to_ping}, ${message}`});
 	console.log('[INFO] Message send!');
-	process.exit(0);
 }
 
 module.exports = { sendDiscordMessage };
