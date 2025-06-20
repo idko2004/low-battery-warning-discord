@@ -70,6 +70,8 @@ Open `config.json` with your favorite text editor and modify the following thing
 
 - `attempts_to_login` indicates how many times the bot should try to connect to Discord in case of failure.
 
+- `data_folder` specifies the directory in which the program will save some contents, you can specify the path to where the program itself is, or just use `data/data/com.termux/files/home/`.
+
 ### Run the bot
 The bot now should be able to run.
 

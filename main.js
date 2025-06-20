@@ -9,6 +9,12 @@ monitorBattery();
 
 async function monitorBattery()
 {
+	if(process.env.TEST === '1')
+	{
+		console.log(`[WARN] We're performing a test, so we'll pretend the charge is currently low.`);
+	}
+
+	//Obtener el estado actual de la batería
 	let status;
 	try
 	{
@@ -18,16 +24,25 @@ async function monitorBattery()
 	{
 		console.log("[ERROR] monitorBattery: Failed to get battery status.");
 		await discordWrapper.sendDiscordMessage(config.messages.error, err.toString());
-		return;
+		process.exit(1);
 	}
 
 	if(status == undefined)
 	{
 		console.log("[ERROR] monitorBattery: Battery status is undefined!");
-		await discordWrapper.sendDiscordMessage(config.messages.error, "Battery status is undefined!");
-		return;
+		await discordWrapper.sendDiscordMessage(config.messages.error, "[ERROR] low-battery-warning-discord: Battery status is undefined!");
+		process.exit(1);
 	}
 
+	//Ver si el estado actual de la batería está por encima de los niveles especificados en config.json, y si el dispositivo está desenchufado (ignorar si es que se está haciendo un test)
+	if((status.percentage >= config.battery_percentage_threshold || status.plugged !== 'UNPLUGGED') && process.env.TEST !== '1')
+	{
+		console.log(`[INFO] Device is at ${status.percentage}% of charge.\n[INFO] Not sending any messages`);
+		await setCurrentState(100); //Guardar 100% como el estado actual de la batería (a pesar de que no sea cierto) para que no interfiera cuando se necesite usar el valor guardado. Debido a que el residuo del valor guardado en una carga anterior (osea, la batería estaba baja, se enchufó y se volvió a descargar) puede interferir haciendo que la notificación no se envié debido a config.notification_threshold.
+		process.exit(0);
+	}
+
+	//Obtener el estado en el que se encontraba la batería la última vez que se ejecutó el programa
 	const previousState = await getPreviousState();
 	let chargeDifference;
 	if(previousState === undefined)
@@ -38,34 +53,23 @@ async function monitorBattery()
 	else
 	{
 		chargeDifference = previousState.percentage - status.percentage;
-		console.log(`[INFO] monitorBattery: Difference between current state and previous state is ${chargeDifference}%`);
+		if(previousState.percentage !== 100) console.log(`[INFO] monitorBattery: Difference between current state and previous state is ${chargeDifference}%`); //Si es 100% no imprimir esto porque queda cutre y ni es cierto.
 	}
 
-	if
-	(
-		(
-			status.percentage <= config.battery_percentage_threshold
-			&& status.plugged == "UNPLUGGED"
-			&& chargeDifference >= config.notification_threshold
-		)
-		|| process.env.TEST === '1'
-	)
+	//No avisar si es que el estado anterior de la batería y el estado actual no difieren demasiado (o más de lo especificado en config.json)
+	if(chargeDifference < config.notification_threshold && process.env.TEST !== '1')
 	{
-		if(process.env.TEST === '1')
-		{
-			console.log(`[WARN] We're performing a test, so we'll pretend the charge is currently low.`);
-		}
-		console.log(`[INFO] The device is at ${status.percentage}% of charge, please plug it in.`);
-		await discordWrapper.sendDiscordMessage(config.messages.low_battery, `${status.percentage}%`);
-
-		await setCurrentState(status.percentage);
-
+		console.log('[INFO] Difference is below threshold, so not sending a message.');
 		process.exit(0);
 	}
-	else
-	{
-		console.log(`[INFO] Device is at ${status.percentage}% of charge.\n[INFO] Not sending any messages`);
-	}
+
+	//Enviar el aviso de que la batería está baja y guardar el estado actual.
+	console.log(`[INFO] The device is at ${status.percentage}% of charge, please plug it in.`);
+	await discordWrapper.sendDiscordMessage(config.messages.low_battery, `${status.percentage}%`);
+
+	await setCurrentState(status.percentage);
+
+	process.exit(0);
 }
 
 function getBatteryStatus()
